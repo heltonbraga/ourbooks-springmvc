@@ -20,4 +20,10 @@ public class HomeController {
 	public String login() {
 		return "login";
 	}
+
+	@GetMapping
+	@RequestMapping("/signup")
+	public String signup() {
+		return "novo_leitor";
+	}
 }
