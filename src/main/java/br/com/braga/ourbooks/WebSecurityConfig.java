@@ -21,8 +21,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers("/*").permitAll();
 		http.authorizeRequests().anyRequest().authenticated();
-//			.antMatchers("/admin").hasAuthority("admin")
-//			.antMatchers("/user").hasAuthority("leitor")
 		http.formLogin(form -> {
 			form.loginPage("/login").defaultSuccessUrl("/leitor/", true).permitAll();
 		}).logout(logout -> {
@@ -33,7 +31,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		System.out.println(encoder.encode("admin"));
 		auth.jdbcAuthentication().dataSource(dataSource)
 				.usersByUsernameQuery("select username, password, enabled from leitores where username = ?")
 				.authoritiesByUsernameQuery(
