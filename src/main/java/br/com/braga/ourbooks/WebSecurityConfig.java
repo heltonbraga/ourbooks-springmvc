@@ -31,7 +31,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		System.out.println(encoder.encode("admin"));
 		auth.jdbcAuthentication().dataSource(dataSource)
 				.usersByUsernameQuery("select username, password, enabled from leitores where username = ?")
 				.authoritiesByUsernameQuery(

@@ -1,4 +1,5 @@
 <html>
+<<<<<<< HEAD
 <meta charset="UTF-8" />
 <head th:replace="~{base :: head}"></head>
 <body>
@@ -22,6 +23,30 @@
 					Ainda não é usuário da melhor comunidade de compartilhamento de livros? <a href="/signup">Cadastre-se!</a>
 				</div>
 			</form>
+=======
+	<meta charset="UTF-8"/>
+	<head th:replace="~{base :: head}"></head>
+	<body>
+		<div th:replace="~{base :: logo}"></div>
+	
+		<div class="container">
+			<div th:replace="~{base :: titulo('Login')}"></div>
+		
+			<div class="card mb-3">
+				<form th:action="@{/login}" class="card-body" method="post">
+					<div class="form-group">
+						<label for="username">Usuário</label>
+						<input name="username"  class="form-control" placeholder="usuário"/>
+					</div>
+					<div class="form-group">
+						<label for="password">Senha</label>
+						<input type="password" name="password" class="form-control" placeholder="senha"/>
+					</div>
+					<button class="btn btn-primary" type="submit">Entrar</button>
+					Ainda não faz parte da nossa comunidade? Cadastre-se!
+				</form>
+			</div>
+>>>>>>> c7fefe11b7626090533481250118e890fbfef0bd
 		</div>
 	</div>
 </body>
