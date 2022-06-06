@@ -5,9 +5,11 @@ import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import br.com.braga.ourbooks.model.Leitor;
 import br.com.braga.ourbooks.model.Situacao;
 import br.com.braga.ourbooks.repository.LeitorRepository;
 import br.com.braga.ourbooks.repository.LivroRepository;
@@ -45,7 +47,8 @@ public class HomeController {
 
 	@GetMapping
 	@RequestMapping("/signup")
-	public String signup() {
+	public String signup(Model model) {
+		model.addAttribute("leitor", new Leitor());
 		return "novo_leitor";
 	}
 }

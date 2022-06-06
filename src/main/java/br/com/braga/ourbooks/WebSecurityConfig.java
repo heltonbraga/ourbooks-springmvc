@@ -8,7 +8,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import br.com.braga.ourbooks.service.MyUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
@@ -17,25 +18,31 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private DataSource dataSource;
 
+	@Autowired
+	private MyUserDetailsService userDetailsService;
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/*").permitAll();
+		http.authorizeRequests().antMatchers("/*", "/user/**").permitAll();
+		http.authorizeRequests().antMatchers("/signup").permitAll();
+		http.authorizeRequests().antMatchers("/leitor/novo").permitAll();
 		http.authorizeRequests().anyRequest().authenticated();
 		http.formLogin(form -> {
-			form.loginPage("/login").defaultSuccessUrl("/leitor/", true).permitAll();
+			form.loginPage("/user/login").defaultSuccessUrl("/leitor/1", true).permitAll();
 		}).logout(logout -> {
 			logout.logoutUrl("/logout").logoutSuccessUrl("/");
 		}).csrf().disable();
+		
 	}
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		auth.userDetailsService(userDetailsService);
 		auth.jdbcAuthentication().dataSource(dataSource)
 				.usersByUsernameQuery("select username, password, enabled from leitores where username = ?")
 				.authoritiesByUsernameQuery(
 						"select username, case when username = 'admin' then 'admin' else 'leitor' end authority from leitores where username = ?")
-				.passwordEncoder(encoder);
+				.passwordEncoder(userDetailsService.getEncoder());
 
 //		insert into leitores (created_at, email, enabled, username, password) values (
 //				NOW(), 'admin@admin', true, 'admin',

@@ -12,6 +12,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
 @Table(name = "leitores")
@@ -19,21 +24,32 @@ public class Leitor {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonView(View.LeitorDetalhe.class)
 	private Long id;
 	
 	@Column(unique = true, length = 50)
+	@NotEmpty
+	@Size(min = 3, max = 50, message = "O campo nome deve ter entre 3 e 50 caracteres")
+	@JsonView(View.LeitorNovo.class)
 	private String username;
 
 	@Column(unique = true, length = 100, nullable = false)
+	@Size(min = 10, max = 100, message = "O campo email deve ter entre 10 e 100 caracteres")
+	@Pattern(regexp = ".+@.+\\..+", message = "O email informado não parece válido")
+	@JsonView(View.LeitorNovo.class)
 	private String email;
 
 	@Column(length = 500, nullable = false)
+	@JsonView(View.LeitorNovo.class)
+	@NotEmpty(message = "É necessário informar uma senha")
 	private String password;
 
 	@Column(nullable = false)
+	@JsonView(View.LeitorDetalhe.class)
 	private boolean enabled;
 	
 	@Column(updatable = false)
+	@JsonView(View.LeitorDetalhe.class)
 	private LocalDateTime createdAt;
 	
 	@ManyToMany
@@ -41,6 +57,7 @@ public class Leitor {
 	  name = "livros_disponiveis", 
 	  joinColumns = @JoinColumn(name = "leitor_id"), 
 	  inverseJoinColumns = @JoinColumn(name = "livro_id"))
+	@JsonView(View.LeitorDetalhe.class)
 	private Set<Livro> disponiveis;
 	
 	@ManyToMany
@@ -48,6 +65,7 @@ public class Leitor {
 	  name = "livros_desejados", 
 	  joinColumns = @JoinColumn(name = "leitor_id"), 
 	  inverseJoinColumns = @JoinColumn(name = "livro_id"))
+	@JsonView(View.LeitorDetalhe.class)
 	private Set<Livro> desejados;
 	
 	public Leitor() {

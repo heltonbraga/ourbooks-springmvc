@@ -5,7 +5,7 @@
 	
 		<div class="container">
 			<div th:replace="~{base :: titulo('home - leitor')}"></div>
-	<p></p>
+	<div class="card-header alert-dark" th:text="${leitor.username}"></div>
 		</div>
 	</body>
 </html>
